@@ -83,23 +83,6 @@
                         <skip>${skip_maven_deploy}</skip>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>8.1.5.v20120716</version>
-                    <configuration>
-                        <stopKey>stop</stopKey>
-                        <stopPort>5599</stopPort>
-                        <!-- 每10秒的间隔扫描一次,实现热部署 -->
-                        <scanIntervalSeconds>10</scanIntervalSeconds>
-                        <connectors>
-                            <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                                <port>80</port>
-                                <maxIdleTime>60000</maxIdleTime>
-                            </connector>
-                        </connectors>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -109,6 +92,7 @@
         <module>willow-codegen</module>
         <module>willow-endoor</module>
         <module>willow-enterprise</module>
+        <module>willow-codegen-plugins</module>
     </modules>
 
     <!-- 配置远程发布到私服，mvn deploy -->
