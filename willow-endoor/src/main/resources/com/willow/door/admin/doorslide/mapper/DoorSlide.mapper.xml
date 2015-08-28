@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.willow.door.admin.doorslide.mapper.DoorSlideMapper">
+<resultMap id="DoorSlideMap" type="com.willow.door.admin.doorslide.domain.DoorSlide">
+    <!--表主键-->
+    <result column="obj_id" property="objId"/>
+    <!--创建时间-->
+    <result column="create_time" property="createTime"/>
+    <!--更新时间-->
+    <result column="update_time" property="updateTime"/>
+    <!--操作人-->
+    <result column="user_id" property="userId"/>
+    <!--中文图片ID-->
+    <result column="file_id" property="fileId"/>
+    <!--英文图片ID-->
+    <result column="file_id_en" property="fileIdEn"/>
+</resultMap>
+    <!--列信息-->
+    <sql id="column_list">
+        obj_id,create_time,update_time,user_id,file_id,file_id_en
+    </sql>
+    <!--criteria的动态条件-->
+    <sql id="criteria_filters">
+        <where>
+            <if test="criteria.valid">
+                <trim prefix="(" suffix=")" prefixOverrides="and">
+                    <foreach collection="criteria.criteria" item="criterion">
+                        <choose>
+                            <when test="criterion.noValue">
+                                and ${criterion.condition}
+                            </when>
+                            <when test="criterion.singleValue">
+                                and ${criterion.condition} #{criterion.value}
+                            </when>
+                            <when test="criterion.betweenValue">
+                                and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                            </when>
+                            <when test="criterion.listValue">
+                                and ${criterion.condition}
+                                <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                         separator=",">
+                                #{listItem}
+                                </foreach>
+                            </when>
+                        </choose>
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </sql>
+    <!--动态条件-->
+    <sql id="where_filters">
+        <where>
+            <if test="objId !=null and objId !=''">
+                and obj_id=#{objId}
+            </if>
+            <if test="createTime !=null and createTime !=''">
+                and create_time=#{createTime}
+            </if>
+            <if test="updateTime !=null and updateTime !=''">
+                and update_time=#{updateTime}
+            </if>
+            <if test="userId !=null and userId !=''">
+                and user_id=#{userId}
+            </if>
+            <if test="fileId !=null and fileId !=''">
+                and file_id=#{fileId}
+            </if>
+            <if test="fileIdEn !=null and fileIdEn !=''">
+                and file_id_en=#{fileIdEn}
+            </if>
+        </where>
+    </sql>
+    <!--保存-->
+    <insert id="save" parameterType="com.willow.door.admin.doorslide.domain.DoorSlide">
+        INSERT INTO t_door_slide(<include refid="column_list"/>)
+        VALUES (#{objId},#{createTime},#{updateTime},#{userId},#{fileId},#{fileIdEn});
+    </insert>
+
+    <!--根据主键查询对象数据-->
+    <select id="selectByObjId" parameterType="string" resultMap="DoorSlideMap">
+        select
+        <include refid="column_list"/>
+        from t_door_slide
+        where obj_id=#{objId}
+    </select>
+
+    <!--根据主键删除-->
+    <delete id="deleteByObjId" parameterType="string">
+        delete from t_door_slide where obj_id=#{objId}
+    </delete>
+
+    <!--根据条件删除-->
+    <delete id="deleteByParam" parameterType="map">
+        delete from t_door_slide
+        <include refid="where_filters"/>
+    </delete>
+
+    <!--更新-->
+    <update id="update" parameterType="com.willow.door.admin.doorslide.domain.DoorSlide">
+        update t_door_slide
+        <set>
+            obj_id=#{objId},
+            create_time=#{createTime},
+            update_time=#{updateTime},
+            user_id=#{userId},
+            file_id=#{fileId},
+            file_id_en=#{fileIdEn}
+        </set>
+        where obj_id=#{objId}
+    </update>
+
+    <!--根据主键ID更新不为空的字段-->
+    <update id="updateByIdSelective" parameterType="com.willow.door.admin.doorslide.domain.DoorSlide">
+        update t_door_slide
+        <set>
+            <if test="objId !=null">
+                obj_id=#{objId},
+            </if>
+            <if test="createTime !=null">
+                create_time=#{createTime},
+            </if>
+            <if test="updateTime !=null">
+                update_time=#{updateTime},
+            </if>
+            <if test="userId !=null">
+                user_id=#{userId},
+            </if>
+            <if test="fileId !=null">
+                file_id=#{fileId},
+            </if>
+            <if test="fileIdEn !=null">
+                file_id_en=#{fileIdEn},
+            </if>
+        </set>
+        where obj_id=#{objId}
+    </update>
+
+    <!--根据条件查询列表-->
+    <select id="queryList" parameterType="map" resultMap="DoorSlideMap">
+        select
+        <include refid="column_list"/>
+        from t_door_slide
+        <include refid="where_filters"/>
+        <if test="sortFieldName!=null and sortFieldName!=''">
+            ORDER BY
+            ${sortFieldName}
+            <if test="sortType!=null and sortType!=''">
+            ${sortType}
+            </if>
+        </if>
+        <if test="pageFirst!=null">
+            limit #{pageFirst},#{pageSize}
+        </if>
+    </select>
+
+    <!--根据条件查询数量-->
+    <select id="countList" parameterType="map" resultType="int">
+        select count(*) from t_door_slide
+        <include refid="where_filters"/>
+    </select>
+
+
+    <!--根据条件查询唯一记录-->
+    <select id="selectByCondition" parameterType="map" resultMap="DoorSlideMap">
+        select
+        <include refid="column_list"/>
+        from t_door_slide
+        <include refid="where_filters"/>
+    </select>
+
+
+    <!--根据Criteria方式查询列表-->
+    <select id="queryListByCriteria" parameterType="map" resultMap="DoorSlideMap">
+        select
+        <include refid="column_list"/>
+        from t_door_slide
+        <include refid="criteria_filters"/>
+        <if test="sortFieldName!=null and sortFieldName!=''">
+            ORDER BY
+            ${sortFieldName}
+            <if test="sortType!=null and sortType!=''">
+            ${sortType}
+            </if>
+        </if>
+        <if test="pageFirst!=null">
+            limit #{pageFirst},#{pageSize}
+        </if>
+    </select>
+
+    <!--根据Criteria方式查询数量-->
+    <select id="countListByCriteria" parameterType="map" resultType="int">
+        select count(*) from t_door_slide
+        <include refid="criteria_filters"/>
+    </select>
+
+
+</mapper>

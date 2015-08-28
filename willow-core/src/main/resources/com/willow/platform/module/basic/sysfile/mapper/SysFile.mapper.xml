@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.willow.platform.module.basic.sysfile.mapper.SysFileMapper">
+<resultMap id="SysFileMap" type="com.willow.platform.module.basic.sysfile.domain.SysFile">
+    <!--表主键-->
+    <result column="obj_id" property="objId"/>
+    <!--创建时间-->
+    <result column="create_time" property="createTime"/>
+    <!--更新时间-->
+    <result column="update_time" property="updateTime"/>
+    <!--操作人-->
+    <result column="user_id" property="userId"/>
+    <!--文件所有者-->
+    <result column="owner_id" property="ownerId"/>
+    <!--文件ID-->
+    <result column="file_id" property="fileId"/>
+    <!--文件类型-->
+    <result column="file_type" property="fileType"/>
+    <!--文件名称-->
+    <result column="file_name" property="fileName"/>
+    <!--文件大小-->
+    <result column="file_size" property="fileSize"/>
+</resultMap>
+    <!--列信息-->
+    <sql id="column_list">
+        obj_id,create_time,update_time,user_id,owner_id,file_id,file_type,file_name,file_size
+    </sql>
+    <!--criteria的动态条件-->
+    <sql id="criteria_filters">
+        <where>
+            <if test="criteria.valid">
+                <trim prefix="(" suffix=")" prefixOverrides="and">
+                    <foreach collection="criteria.criteria" item="criterion">
+                        <choose>
+                            <when test="criterion.noValue">
+                                and ${criterion.condition}
+                            </when>
+                            <when test="criterion.singleValue">
+                                and ${criterion.condition} #{criterion.value}
+                            </when>
+                            <when test="criterion.betweenValue">
+                                and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                            </when>
+                            <when test="criterion.listValue">
+                                and ${criterion.condition}
+                                <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                         separator=",">
+                                #{listItem}
+                                </foreach>
+                            </when>
+                        </choose>
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </sql>
+    <!--动态条件-->
+    <sql id="where_filters">
+        <where>
+            <if test="objId !=null and objId !=''">
+                and obj_id=#{objId}
+            </if>
+            <if test="createTime !=null and createTime !=''">
+                and create_time=#{createTime}
+            </if>
+            <if test="updateTime !=null and updateTime !=''">
+                and update_time=#{updateTime}
+            </if>
+            <if test="userId !=null and userId !=''">
+                and user_id=#{userId}
+            </if>
+            <if test="ownerId !=null and ownerId !=''">
+                and owner_id=#{ownerId}
+            </if>
+            <if test="fileId !=null and fileId !=''">
+                and file_id=#{fileId}
+            </if>
+            <if test="fileType !=null and fileType !=''">
+                and file_type=#{fileType}
+            </if>
+            <if test="fileName !=null and fileName !=''">
+                and file_name=#{fileName}
+            </if>
+            <if test="fileSize !=null and fileSize !=''">
+                and file_size=#{fileSize}
+            </if>
+        </where>
+    </sql>
+    <!--保存-->
+    <insert id="save" parameterType="com.willow.platform.module.basic.sysfile.domain.SysFile">
+        INSERT INTO sys_file(<include refid="column_list"/>)
+        VALUES (#{objId},#{createTime},#{updateTime},#{userId},#{ownerId},#{fileId},#{fileType},#{fileName},#{fileSize});
+    </insert>
+
+    <!--根据主键查询对象数据-->
+    <select id="selectByObjId" parameterType="string" resultMap="SysFileMap">
+        select
+        <include refid="column_list"/>
+        from sys_file
+        where obj_id=#{objId}
+    </select>
+
+    <!--根据主键删除-->
+    <delete id="deleteByObjId" parameterType="string">
+        delete from sys_file where obj_id=#{objId}
+    </delete>
+
+    <!--根据条件删除-->
+    <delete id="deleteByParam" parameterType="map">
+        delete from sys_file
+        <include refid="where_filters"/>
+    </delete>
+
+    <!--更新-->
+    <update id="update" parameterType="com.willow.platform.module.basic.sysfile.domain.SysFile">
+        update sys_file
+        <set>
+            obj_id=#{objId},
+            create_time=#{createTime},
+            update_time=#{updateTime},
+            user_id=#{userId},
+            owner_id=#{ownerId},
+            file_id=#{fileId},
+            file_type=#{fileType},
+            file_name=#{fileName},
+            file_size=#{fileSize}
+        </set>
+        where obj_id=#{objId}
+    </update>
+
+    <!--根据主键ID更新不为空的字段-->
+    <update id="updateByIdSelective" parameterType="com.willow.platform.module.basic.sysfile.domain.SysFile">
+        update sys_file
+        <set>
+            <if test="objId !=null">
+                obj_id=#{objId},
+            </if>
+            <if test="createTime !=null">
+                create_time=#{createTime},
+            </if>
+            <if test="updateTime !=null">
+                update_time=#{updateTime},
+            </if>
+            <if test="userId !=null">
+                user_id=#{userId},
+            </if>
+            <if test="ownerId !=null">
+                owner_id=#{ownerId},
+            </if>
+            <if test="fileId !=null">
+                file_id=#{fileId},
+            </if>
+            <if test="fileType !=null">
+                file_type=#{fileType},
+            </if>
+            <if test="fileName !=null">
+                file_name=#{fileName},
+            </if>
+            <if test="fileSize !=null">
+                file_size=#{fileSize},
+            </if>
+        </set>
+        where obj_id=#{objId}
+    </update>
+
+    <!--根据条件查询列表-->
+    <select id="queryList" parameterType="map" resultMap="SysFileMap">
+        select
+        <include refid="column_list"/>
+        from sys_file
+        <include refid="where_filters"/>
+        <if test="sortFieldName!=null and sortFieldName!=''">
+            ORDER BY
+            ${sortFieldName}
+            <if test="sortType!=null and sortType!=''">
+            ${sortType}
+            </if>
+        </if>
+        <if test="pageFirst!=null">
+            limit #{pageFirst},#{pageSize}
+        </if>
+    </select>
+
+    <!--根据条件查询数量-->
+    <select id="countList" parameterType="map" resultType="int">
+        select count(*) from sys_file
+        <include refid="where_filters"/>
+    </select>
+
+
+    <!--根据条件查询唯一记录-->
+    <select id="selectByCondition" parameterType="map" resultMap="SysFileMap">
+        select
+        <include refid="column_list"/>
+        from sys_file
+        <include refid="where_filters"/>
+    </select>
+
+
+    <!--根据Criteria方式查询列表-->
+    <select id="queryListByCriteria" parameterType="map" resultMap="SysFileMap">
+        select
+        <include refid="column_list"/>
+        from sys_file
+        <include refid="criteria_filters"/>
+        <if test="sortFieldName!=null and sortFieldName!=''">
+            ORDER BY
+            ${sortFieldName}
+            <if test="sortType!=null and sortType!=''">
+            ${sortType}
+            </if>
+        </if>
+        <if test="pageFirst!=null">
+            limit #{pageFirst},#{pageSize}
+        </if>
+    </select>
+
+    <!--根据Criteria方式查询数量-->
+    <select id="countListByCriteria" parameterType="map" resultType="int">
+        select count(*) from sys_file
+        <include refid="criteria_filters"/>
+    </select>
+
+
+</mapper>

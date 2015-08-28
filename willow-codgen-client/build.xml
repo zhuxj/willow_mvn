@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project name="codegen" xmlns:artifact="urn:maven-artifact-ant">
+    <path id="compile.classpath">
+        <fileset dir="./lib" includes="**/*.jar"/>
+    </path>
+
+    <!--  存放依赖包的目录  -->
+    <property name="build.lib.dir" location="./lib"/>
+    <!--  find maven-ant-tasks, you can use classpathref to specify the jar, or just copy the jar to ant/lib   -->
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"/>
+    <!--  maven的文件  -->
+    <artifact:pom id="maven.project" file="pom.xml"/>
+    <artifact:dependencies filesetId="deps.fileset.compile">
+        <pom refid="maven.project"/>
+    </artifact:dependencies>
+
+    <target name="lib.init">
+        <copy todir="${build.lib.dir}">
+            <fileset refid="deps.fileset.compile"/>
+            <mapper type="flatten"/>
+        </copy>
+    </target>
+
+    <!--在定义该任务之前需要先注销-->
+    <taskdef name="codeGenTask"
+             classname="com.willow.codegen.ant.CodegenTask">
+        <classpath refid="compile.classpath"></classpath>
+    </taskdef>
+    <!--代码生成任务-->
+    <target name="codeGen" description="代码生成器" depends="lib.init">
+        <codeGenTask codegenconfig="/src/main/resources/codeGenConfig.yml">
+        </codeGenTask>
+    </target>
+</project>

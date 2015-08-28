@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.willow.door.admin.doororder.mapper.DoorOrderMapper">
+<resultMap id="DoorOrderMap" type="com.willow.door.admin.doororder.domain.DoorOrder">
+    <!--表主键-->
+    <result column="obj_id" property="objId"/>
+    <!--创建时间-->
+    <result column="create_time" property="createTime"/>
+    <!--更新时间-->
+    <result column="update_time" property="updateTime"/>
+    <!--操作人-->
+    <result column="user_id" property="userId"/>
+    <!--产品ID-->
+    <result column="product_id" property="productId"/>
+    <!--订单编号-->
+    <result column="order_no" property="orderNo"/>
+    <!--订单数量-->
+    <result column="order_num" property="orderNum"/>
+    <!--联系人-->
+    <result column="contact_name" property="contactName"/>
+    <!--联系地址-->
+    <result column="contact_address" property="contactAddress"/>
+    <!--联系手机-->
+    <result column="contact_phone" property="contactPhone"/>
+    <!--联系电话-->
+    <result column="contact_tel" property="contactTel"/>
+    <!--电子邮箱-->
+    <result column="contact_email" property="contactEmail"/>
+    <!--QQ-->
+    <result column="contact_qq" property="contactQq"/>
+    <!--订单状态-->
+    <result column="order_status" property="orderStatus"/>
+    <!--备注-->
+    <result column="contact_memo" property="contactMemo"/>
+</resultMap>
+    <!--列信息-->
+    <sql id="column_list">
+        obj_id,create_time,update_time,user_id,product_id,order_no,order_num,contact_name,contact_address,contact_phone,contact_tel,contact_email,contact_qq,order_status,contact_memo
+    </sql>
+    <!--criteria的动态条件-->
+    <sql id="criteria_filters">
+        <where>
+            <if test="criteria.valid">
+                <trim prefix="(" suffix=")" prefixOverrides="and">
+                    <foreach collection="criteria.criteria" item="criterion">
+                        <choose>
+                            <when test="criterion.noValue">
+                                and ${criterion.condition}
+                            </when>
+                            <when test="criterion.singleValue">
+                                and ${criterion.condition} #{criterion.value}
+                            </when>
+                            <when test="criterion.betweenValue">
+                                and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                            </when>
+                            <when test="criterion.listValue">
+                                and ${criterion.condition}
+                                <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                         separator=",">
+                                #{listItem}
+                                </foreach>
+                            </when>
+                        </choose>
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </sql>
+    <!--动态条件-->
+    <sql id="where_filters">
+        <where>
+            <if test="objId !=null and objId !=''">
+                and obj_id=#{objId}
+            </if>
+            <if test="createTime !=null and createTime !=''">
+                and create_time=#{createTime}
+            </if>
+            <if test="updateTime !=null and updateTime !=''">
+                and update_time=#{updateTime}
+            </if>
+            <if test="userId !=null and userId !=''">
+                and user_id=#{userId}
+            </if>
+            <if test="productId !=null and productId !=''">
+                and product_id=#{productId}
+            </if>
+            <if test="orderNo !=null and orderNo !=''">
+                and order_no=#{orderNo}
+            </if>
+            <if test="orderNum !=null and orderNum !=''">
+                and order_num=#{orderNum}
+            </if>
+            <if test="contactName !=null and contactName !=''">
+                and contact_name=#{contactName}
+            </if>
+            <if test="contactAddress !=null and contactAddress !=''">
+                and contact_address=#{contactAddress}
+            </if>
+            <if test="contactPhone !=null and contactPhone !=''">
+                and contact_phone=#{contactPhone}
+            </if>
+            <if test="contactTel !=null and contactTel !=''">
+                and contact_tel=#{contactTel}
+            </if>
+            <if test="contactEmail !=null and contactEmail !=''">
+                and contact_email=#{contactEmail}
+            </if>
+            <if test="contactQq !=null and contactQq !=''">
+                and contact_qq=#{contactQq}
+            </if>
+            <if test="orderStatus !=null and orderStatus !=''">
+                and order_status=#{orderStatus}
+            </if>
+            <if test="contactMemo !=null and contactMemo !=''">
+                and contact_memo=#{contactMemo}
+            </if>
+        </where>
+    </sql>
+    <!--保存-->
+    <insert id="save" parameterType="com.willow.door.admin.doororder.domain.DoorOrder">
+        INSERT INTO t_door_order(<include refid="column_list"/>)
+        VALUES (#{objId},#{createTime},#{updateTime},#{userId},#{productId},#{orderNo},#{orderNum},#{contactName},#{contactAddress},#{contactPhone},#{contactTel},#{contactEmail},#{contactQq},#{orderStatus},#{contactMemo});
+    </insert>
+
+    <!--根据主键查询对象数据-->
+    <select id="selectByObjId" parameterType="string" resultMap="DoorOrderMap">
+        select
+        <include refid="column_list"/>
+        from t_door_order
+        where obj_id=#{objId}
+    </select>
+
+    <!--根据主键删除-->
+    <delete id="deleteByObjId" parameterType="string">
+        delete from t_door_order where obj_id=#{objId}
+    </delete>
+
+    <!--根据条件删除-->
+    <delete id="deleteByParam" parameterType="map">
+        delete from t_door_order
+        <include refid="where_filters"/>
+    </delete>
+
+    <!--更新-->
+    <update id="update" parameterType="com.willow.door.admin.doororder.domain.DoorOrder">
+        update t_door_order
+        <set>
+            obj_id=#{objId},
+            create_time=#{createTime},
+            update_time=#{updateTime},
+            user_id=#{userId},
+            product_id=#{productId},
+            order_no=#{orderNo},
+            order_num=#{orderNum},
+            contact_name=#{contactName},
+            contact_address=#{contactAddress},
+            contact_phone=#{contactPhone},
+            contact_tel=#{contactTel},
+            contact_email=#{contactEmail},
+            contact_qq=#{contactQq},
+            order_status=#{orderStatus},
+            contact_memo=#{contactMemo}
+        </set>
+        where obj_id=#{objId}
+    </update>
+
+    <!--根据主键ID更新不为空的字段-->
+    <update id="updateByIdSelective" parameterType="com.willow.door.admin.doororder.domain.DoorOrder">
+        update t_door_order
+        <set>
+            <if test="objId !=null">
+                obj_id=#{objId},
+            </if>
+            <if test="createTime !=null">
+                create_time=#{createTime},
+            </if>
+            <if test="updateTime !=null">
+                update_time=#{updateTime},
+            </if>
+            <if test="userId !=null">
+                user_id=#{userId},
+            </if>
+            <if test="productId !=null">
+                product_id=#{productId},
+            </if>
+            <if test="orderNo !=null">
+                order_no=#{orderNo},
+            </if>
+            <if test="orderNum !=null">
+                order_num=#{orderNum},
+            </if>
+            <if test="contactName !=null">
+                contact_name=#{contactName},
+            </if>
+            <if test="contactAddress !=null">
+                contact_address=#{contactAddress},
+            </if>
+            <if test="contactPhone !=null">
+                contact_phone=#{contactPhone},
+            </if>
+            <if test="contactTel !=null">
+                contact_tel=#{contactTel},
+            </if>
+            <if test="contactEmail !=null">
+                contact_email=#{contactEmail},
+            </if>
+            <if test="contactQq !=null">
+                contact_qq=#{contactQq},
+            </if>
+            <if test="orderStatus !=null">
+                order_status=#{orderStatus},
+            </if>
+            <if test="contactMemo !=null">
+                contact_memo=#{contactMemo},
+            </if>
+        </set>
+        where obj_id=#{objId}
+    </update>
+
+    <!--根据条件查询列表-->
+    <select id="queryList" parameterType="map" resultMap="DoorOrderMap">
+        select
+        <include refid="column_list"/>
+        from t_door_order
+        <include refid="where_filters"/>
+        <if test="sortFieldName!=null and sortFieldName!=''">
+            ORDER BY
+            ${sortFieldName}
+            <if test="sortType!=null and sortType!=''">
+            ${sortType}
+            </if>
+        </if>
+        <if test="pageFirst!=null">
+            limit #{pageFirst},#{pageSize}
+        </if>
+    </select>
+
+    <!--根据条件查询数量-->
+    <select id="countList" parameterType="map" resultType="int">
+        select count(*) from t_door_order
+        <include refid="where_filters"/>
+    </select>
+
+
+    <!--根据条件查询唯一记录-->
+    <select id="selectByCondition" parameterType="map" resultMap="DoorOrderMap">
+        select
+        <include refid="column_list"/>
+        from t_door_order
+        <include refid="where_filters"/>
+    </select>
+
+
+    <!--根据Criteria方式查询列表-->
+    <select id="queryListByCriteria" parameterType="map" resultMap="DoorOrderMap">
+        select
+        <include refid="column_list"/>
+        from t_door_order
+        <include refid="criteria_filters"/>
+        <if test="sortFieldName!=null and sortFieldName!=''">
+            ORDER BY
+            ${sortFieldName}
+            <if test="sortType!=null and sortType!=''">
+            ${sortType}
+            </if>
+        </if>
+        <if test="pageFirst!=null">
+            limit #{pageFirst},#{pageSize}
+        </if>
+    </select>
+
+    <!--根据Criteria方式查询数量-->
+    <select id="countListByCriteria" parameterType="map" resultType="int">
+        select count(*) from t_door_order
+        <include refid="criteria_filters"/>
+    </select>
+
+
+</mapper>

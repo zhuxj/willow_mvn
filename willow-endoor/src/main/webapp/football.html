@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        function bindComputer() {
+            document.getElementById("computer").onclick = function (e) {
+                var start = document.getElementById("start").value;
+                if (start == "") {
+                    return;
+                }
+                start = parseFloat(start);
+                var totalNum = 7;
+                var getTotalMoney = start;
+                var lastRrTotalMoney = start;
+                var nextMoney = start;
+                var pl = 2;
+                var resultStr = "";
+
+                var i = 1;
+                do {
+                    resultStr += (nextMoney.toFixed(2)) + "<br/>";
+                    i++;
+                    getTotalMoney = i * start;
+                    nextMoney = (getTotalMoney + lastRrTotalMoney) / (pl - 1);
+                    lastRrTotalMoney += nextMoney;
+                } while (i <= 7);
+                document.getElementById("result").innerHTML = resultStr;
+            };
+
+
+        }
+    </script>
+</head>
+<body onload="bindComputer();">
+<div>
+    <input type="text" name="start" id="start">
+    <input type="button" id="computer" value="computer">
+</div>
+<div id="result"></div>
+</body>
+</html>
