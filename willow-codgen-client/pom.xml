@@ -20,7 +20,7 @@
                 <artifactId>willow-codegen-plugins</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
-                    <baseDir>${project.basedir}</baseDir>
+                    <projectBaseDir>${project.basedir}</projectBaseDir>
                     <codeGenConfigPath>\src\main\resources\codeGenConfig.yml</codeGenConfigPath>
                 </configuration>
             </plugin>

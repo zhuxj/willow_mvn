@@ -19,7 +19,7 @@ import org.apache.maven.plugin.MojoExecutionException;
  */
 public class codeGenMojo extends AbstractMojo {
     /**
-     * @parameter alias="baseDir"
+     * @parameter alias="projectBaseDir"
      */
     private String baseDir;
 
